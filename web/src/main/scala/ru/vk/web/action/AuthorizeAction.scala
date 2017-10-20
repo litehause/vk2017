@@ -16,7 +16,7 @@ case class ResponseAuthorization(id: Long,
 
 @GET("/authorize")
 @Swagger(
-  Swagger.Description("Авторизация или регистрация нового пользователя в ответ отдасться кука все последущие запросы необходимо производить с ней"),
+  Swagger.Tags("Authorization"),
   Swagger.Description("Авторизация или регистрация нового пользователя в ответ отдасться кука все последущие запросы необходимо производить с ней"),
   Swagger.StringQuery("id", "id пользователя в контакте"),
   Swagger.StringQuery("name", "Имя пользователя например иван иванов или костя сергеев"),

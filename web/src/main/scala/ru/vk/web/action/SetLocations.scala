@@ -7,13 +7,13 @@ import xitrum.annotation.{POST, Swagger}
 
 @POST("/location/set")
 @Swagger(
-  Swagger.Tags("Установка новых координат"),
   Swagger.Description("Установка новых координат"),
   Swagger.StringQuery("coordinate", "координаты в json которые будут сохранены как нужно"),
   Swagger.Response(200, "ok")
 )
 class SetLocations extends AbstractRestAction
-  with DBConnection with UserAction with SkipCsrfCheck {
+  with DBConnection with UserAction
+  with SkipCsrfCheck with SwaggerLocationTag{
   override protected def calculate(): AnyRef = {
     val route = param("coordinate")
     db withDynTransaction Location.save(userId = user.id,

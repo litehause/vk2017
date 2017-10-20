@@ -8,7 +8,7 @@ import xitrum.annotation.{GET, POST, Swagger}
 
 @POST("/users/get")
 @Swagger(
-  Swagger.Tags("Получение координат"),
+  Swagger.Tags("users"),
   Swagger.Description("Получение координат"),
   Swagger.StringBody("ids")
 )
