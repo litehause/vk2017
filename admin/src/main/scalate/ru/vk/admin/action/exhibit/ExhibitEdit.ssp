@@ -1,0 +1,84 @@
+<%
+    import ru.vk.core.model.Exhibit
+    import ru.vk.core.model.DataFile
+
+    import ru.vk.admin.action.rest.FileUploader
+    val exhibit:Option[Exhibit] = at("exhibit")
+    val file: Option[DataFile] = at("file")
+    val thumbmail: Option[DataFile] = at("thumbMail")
+%>
+<div class="row" id="exhibitEdit">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">Редактирование экспоната</h3>
+            </div>
+            <form class="box-body" method="post">
+                <div class="form-group">
+                    <label class="control-label">id</label>
+                    <label class="form-control"><%=exhibit.map(_.id.toString).getOrElse("")%></label>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Name</label>
+                    <input type="text" class="form-control" name="name" value="<%=exhibit.map(_.name).getOrElse("")%>"/>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Зааголовок</label>
+                    <input type="text" class="form-control" name="title" value="<%=exhibit.map(_.title).getOrElse("")%>"/>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Описакние</label>
+                    <textarea class="form-control" rows="5" name="information"><%=exhibit.flatMap(_.information).getOrElse("")%></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Файл выставки: </label>
+                    <input type="hidden" name="fileId" id="fileId" value="<%=exhibit.map(_.fileId.toString).getOrElse("")%>">
+                    <label class="control-label" id="fileName"><%=file.map(_.name).getOrElse("")%></label>
+                    <input id ="fileUploader" class="form-control" type='file' name='file' data-url="<%=url[FileUploader]%>"
+                                data-form-data='{"csrf-token": "<%=antiCsrfToken%>", "dtype": "<%=DataFile.DTYPE_exhibit_file%>"}'
+                                style="visibility:hidden;" />
+                    <%
+                        val (styleAdd, styleDelete) = if (file.isDefined) {
+                            ("display: none;", "display:block")
+                        } else {
+                            ("display:block", "display: none;")
+                        }
+                    %>
+                    <a href="javascript:void(0);" class="btn btn-success" id="addFile" style="<%=styleAdd%>">добавить файл</a>
+                    <a href="javascript:void(0);" class="btn btn-danger"  id="deleteFile" style="<%=styleDelete%>">удалить файл</a>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">Картинка превью выставки</label>
+                    <input type="hidden" name="thumbMailFileId" id="thumbMailFileId"
+                        value="<%=exhibit.flatMap(_.thumbMailFileId.map(_.toString)).getOrElse("")%>">
+                    <label class="control-label" id="thumbMailFileName"><%=thumbmail.map(_.name).getOrElse("")%></label>
+                    <input id ="thumbMailfileUploader" class="form-control"
+                        type='file' name='file'
+                        data-url="<%=url[FileUploader]%>"
+                        data-form-data='{"csrf-token": "<%=antiCsrfToken%>", "dtype": "<%=DataFile.DTYPE_exhibit_thumb_mail%>"}'
+                        style="visibility:hidden;" />
+                        <%
+                            val (styleAddt, styleDeletet) = if (thumbmail.isDefined) {
+                                ("display: none;", "display:block")
+                            } else {
+                                ("display:block", "display: none;")
+                            }
+                        %>
+                    <a href="javascript:void(0);" class="btn btn-success" id="addThumbMailFile" style="<%=styleAddt%>">добавить файл</a>
+                    <a href="javascript:void(0);" class="btn btn-danger"  id="deleteThumbMailFile" style="<%=styleDeletet%>">удалить файл</a>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" class="btn btn-primary" value="Сохранить">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="<%=publicUrl("js/exhibitEdit.js")%>"></script>
+
+<script type="text/JavaScript" src="<%=publicUrl("lib/jQuery-File-Upload/js/vendor/jquery.ui.widget.js")%>"></script>
+<script type="text/JavaScript" src="<%=publicUrl("lib/jQuery-File-Upload/js/jquery.iframe-transport.js")%>"></script>
+<script type="text/javascript" src="<%=publicUrl("lib/jQuery-File-Upload/js/jquery.fileupload.js")%>"></script>

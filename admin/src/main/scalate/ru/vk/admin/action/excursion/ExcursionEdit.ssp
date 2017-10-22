@@ -1,0 +1,109 @@
+<%
+    import ru.vk.core.model.Exhibition
+    import ru.vk.core.model.Excursion
+    import ru.vk.core.model.Exhibit
+    import ru.vk.admin.action.rest.FileUploader
+    import ru.vk.core.model.DataFile
+
+    val exhibitions: List[Exhibition] = at("exhibitions")
+    val excursion: Option[Excursion] = at("excursion")
+    val file: Option[DataFile] = at("file")
+    val image: Option[DataFile] = at("image")
+    val exhibits: List[Exhibit] = at("exhibits")
+    val selectedExhibits: List[Long] = at("selectedExhibits")
+%>
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="excursionEdit">
+        <form class="box box-primary">
+            <div class="box-header">
+                <h3>Редактирование экскурсии</h3>
+            </div>
+            <div class="box-body">
+                <div class="form-group">
+                    <label class="control-label">ID</label>
+                    <label><%=excursion.map(_.id.toString).getOrElse("")%></label>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Заголовок</label>
+                    <input type="text" name="title" class="form-control" value="<%=excursion.map(_.title).getOrElse("")%>"/>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Описание</label>
+                    <textarea class="form-control" name="information"><%=excursion.map(_.information).getOrElse("")%></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Выставка</label>
+                    <select class="form-control" name="exhibition">
+                        <option></option>
+                        #for(ex <- exhibitions)
+                            #if(excursion.exists(ex1 => ex1.exhibitionId == ex.id))
+                                <option value="<%=ex.id.toString%>" selected><%=ex.title%></option>
+                            #else
+                                <option value="<%=ex.id.toString%>"><%=ex.title%></option>
+                            #end
+                        #end
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Экспонаты</label>
+                    <select class="form-control select2" name="exhibits[]" multiple="multiple" id="selectExhibit">
+                        #for(ex <- exhibits)
+                            #if(selectedExhibits.contains(ex.id))
+                                <option value="<%=ex.id.toString()%>" selected><%=ex.title%></option>
+                            #else
+                                <option value="<%=ex.id.toString()%>"><%=ex.title%></option>
+                            #end
+                        #end
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">Файл экскурсии</label>
+                    <input type="hidden" name="fileId" id="fileId" value="<%=excursion.map(_.file.toString).getOrElse("")%>">
+                    <label class="control-label" id="fileName"><%=file.map(_.name).getOrElse("")%></label>
+                    <input id ="fileUploader" class="form-control" type='file' name='file' data-url="<%=url[FileUploader]%>"
+                        data-form-data='{"csrf-token": "<%=antiCsrfToken%>", "dtype": "<%=DataFile.DTYPE_excursion%>"}'
+                        style="visibility:hidden;" />
+                        <%
+                            val (styleAdd, styleDelete) = if (file.isDefined) {
+                                ("display: none;", "display:block")
+                            } else {
+                                ("display:block", "display: none;")
+                            }
+                        %>
+                    <a href="javascript:void(0);" class="btn btn-success" id="addFile" style="<%=styleAdd%>">добавить файл</a>
+                    <a href="javascript:void(0);" class="btn btn-danger"  id="deleteFile" style="<%=styleDelete%>">удалить файл</a>
+
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Превью</label>
+                    <input type="hidden" name="imageId" id="imageId" value="<%=excursion.map(_.imageId.toString).getOrElse("")%>">
+                    <label class="control-label" id="fileNameImage"><%=image.map(_.name).getOrElse("")%></label>
+                    <input id ="fileUploaderImage" class="form-control" type='file' name='file' data-url="<%=url[FileUploader]%>"
+                        data-form-data='{"csrf-token": "<%=antiCsrfToken%>", "dtype": "<%=DataFile.DTYPE_excursion_image%>"}'
+                        style="visibility:hidden;" />
+                    <%
+                        val (styleAddI, styleDeleteI) = if (image.isDefined) {
+                            ("display: none;", "display:block")
+                        } else {
+                            ("display:block", "display: none;")
+                        }
+                    %>
+                    <a href="javascript:void(0);" class="btn btn-success" id="addFileImage" style="<%=styleAddI%>">добавить файл</a>
+                    <a href="javascript:void(0);" class="btn btn-danger"  id="deleteFileImage" style="<%=styleDeleteI%>">удалить файл</a>
+
+                 </div>
+            </div>
+            <div class="box-footer">
+                <input type="submit" class="btn btn-success" value="Сохранить"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript" src="<%=publicUrl("js/excursion.js")%>"></script>
+<script type="text/javascript" src="<%=publicUrl("lib/select2/dist/js/select2.full.min.js")%>"></script>
+<link rel="stylesheet" href="<%=publicUrl("lib/select2/dist/css/select2.min.css")%>">
+<script type="text/JavaScript" src="<%=publicUrl("lib/jQuery-File-Upload/js/vendor/jquery.ui.widget.js")%>"></script>
+<script type="text/JavaScript" src="<%=publicUrl("lib/jQuery-File-Upload/js/jquery.iframe-transport.js")%>"></script>
+<script type="text/javascript" src="<%=publicUrl("lib/jQuery-File-Upload/js/jquery.fileupload.js")%>"></script>

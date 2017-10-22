@@ -51,3 +51,67 @@ ALTER TABLE location drop COLUMN lat;
 ALTER TABLE location DROP COLUMN route;
 
 ALTER TABLE location ADD COLUMN coordinate text;
+
+-------------------------
+CREATE table files (
+  id bigint primary key default nextval('nextval_slick'),
+  name VARCHAR(255) not NULL,
+  dtype VARCHAR(255) NOT NULL
+);
+
+-- экспонат
+CREATE TABLE exhibit (
+  id bigint primary key default nextval('nextval_slick'),
+  name VARCHAR(255) NOT NULL,
+  file BIGINT NOT NULL REFERENCES files(id),
+  thumbmail BIGINT REFERENCES files(id),
+  title VARCHAR(255),
+  information text
+);
+
+--INSERT INTO exhibit(name, file, thumbmail, title, information) VALUES
+-----------------------------------------------------------------------------------
+-- выставки
+CREATE TABLE exhibition (
+  id bigint primary key default nextval('nextval_slick'),
+  title VARCHAR(255) not NULL,
+  information VARCHAR(255) NOT NULL,
+  image BIGINT NOT NULL REFERENCES files(id)
+);
+
+--INSERT INTO exhibition(title, information, image) VALUES ()
+
+
+--- связь экспонат --- выставка
+
+CREATE TABLE exhibit_exhibition_link (
+  exhibition_id BIGINT NOT NULL REFERENCES exhibition(id),
+  exhibit_id BIGINT NOT NULL REFERENCES exhibit(id),
+  index int not NULL DEFAULT 0
+);
+
+--INSERT INTO exhibit_exhibition_link(exhibition_id, exhibit_id, index) VALUES ()
+
+---Экскурсия
+
+CREATE TABLE excursion (
+  id bigint primary key default nextval('nextval_slick'),
+  title VARCHAR(255) NOT NULL,
+  information text NOT NULL,
+  image BIGINT NOT NULL REFERENCES files(id),
+  file BIGINT NOT NULL REFERENCES files(id)
+);
+
+ALTER TABLE excursion ADD COLUMN exhibition_id BIGINT NOT NULL REFERENCES exhibition(id);
+--INSERT INTO excursion(title, information, image, file) VALUES ()
+
+CREATE TABLE exhibit_excursion_link (
+  exhibit_id BIGINT NOT NULL REFERENCES exhibit(id),
+  excursion_id BIGINT NOT NULL REFERENCES excursion(id),
+  index INT NOT NULL DEFAULT 0
+);
+
+
+-- в админке тока загрузка файлов остальные вещи буду делать в ручную запросами
+---Надо продумать систему экскурсий (аудио или видео трансляции с возможностью от клиентов задавать вопросы0)
+---Надо както расказать информацию о том что за картина как она делалась или еще интересные файкты

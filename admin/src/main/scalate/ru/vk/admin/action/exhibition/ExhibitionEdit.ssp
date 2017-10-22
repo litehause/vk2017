@@ -1,0 +1,74 @@
+<%
+    import ru.vk.core.model.Exhibition
+    import ru.vk.core.model.DataFile
+    import ru.vk.admin.action.rest.FileUploader
+    import ru.vk.core.model.{DataFile, Exhibit, Exhibition}
+
+    val exhibition: Option[Exhibition] = at("exhibition")
+    val file: Option[DataFile] = at("image")
+    val exhibits: List[Exhibit] = at("exhibits")
+    val selectedExhibits: List[Long] = at("selectedExhibits")
+%>
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <form class="box box-primary" method="post" id="exhibitionEdit">
+            <div class="box-header">
+                <h3>Редактирование выставки</h3>
+            </div>
+            <div class="box-body">
+                <div class="form-group">
+                    <label class="control-label">ID</label>
+                    <label class="control-label"></label>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Заголовок</label>
+                    <input type="text" class="form-control" name="title" value="<%=exhibition.map(_.title).getOrElse("")%>"/>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Описание</label>
+                    <textarea class="form-control" name="information"><%=exhibition.map(_.information).getOrElse("")%></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">картирка</label>
+                    <input type="hidden" name="fileId" id="fileId" value="<%=exhibition.map(_.imageId.toString).getOrElse("")%>">
+                    <label class="control-label" id="fileName"><%=file.map(_.name).getOrElse("")%></label>
+                    <input id ="fileUploader" class="form-control" type='file' name='file' data-url="<%=url[FileUploader]%>"
+                        data-form-data='{"csrf-token": "<%=antiCsrfToken%>", "dtype": "<%=DataFile.DTYPE_exhibition_image%>"}'
+                        style="visibility:hidden;" />
+                        <%
+                            val (styleAdd, styleDelete) = if (file.isDefined) {
+                                ("display: none;", "display:block")
+                            } else {
+                               ("display:block", "display: none;")
+                            }
+                        %>
+                        <a href="javascript:void(0);" class="btn btn-success" id="addFile" style="<%=styleAdd%>">добавить файл</a>
+                        <a href="javascript:void(0);" class="btn btn-danger"  id="deleteFile" style="<%=styleDelete%>">удалить файл</a>
+
+                </div>
+                <div class="form-group">
+                    <label class="control-label">экспонаты</label>
+                    <select id="selectExhibit" class="form-control select2" name="exhibits[]" multiple="multiple">
+                        #for(e <- exhibits)
+                            #if (selectedExhibits.contains(e.id))
+                                <option value="<%=e.id.toString%>" selected><%=e.title%></option>
+                            #else
+                                <option value="<%=e.id.toString%>"><%=e.title%></option>
+                            #end
+                        #end
+                    </select>
+                </div>
+            </div>
+            <div class="box-footer">
+                <input type="submit" class="btn btn-success" value="Сохранить"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript" src="<%=publicUrl("js/exhibitionEdit.js")%>"></script>
+<script type="text/javascript" src="<%=publicUrl("lib/select2/dist/js/select2.full.min.js")%>"></script>
+<link rel="stylesheet" href="<%=publicUrl("lib/select2/dist/css/select2.min.css")%>">
+<script type="text/JavaScript" src="<%=publicUrl("lib/jQuery-File-Upload/js/vendor/jquery.ui.widget.js")%>"></script>
+<script type="text/JavaScript" src="<%=publicUrl("lib/jQuery-File-Upload/js/jquery.iframe-transport.js")%>"></script>
+<script type="text/javascript" src="<%=publicUrl("lib/jQuery-File-Upload/js/jquery.fileupload.js")%>"></script>

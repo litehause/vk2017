@@ -1,0 +1,35 @@
+<%
+    import ru.vk.core.model.Excursion
+    import ru.vk.admin.action.excursion.ExcursionEdit
+
+
+    val excursions: List[Excursion] = at("excursions")
+%>
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <a href="<%=url[ExcursionEdit]()%>" class="btn btn-success">Добавить</a>
+                <h3 class="box-title">Список экспонатов</h3>
+            </div>
+            <div class="box-body">
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <th>#</th>
+                            <th>title</th>
+                            <th style="width: 15%;"></th>
+                        </tr>
+                        #for(ex <-excursions)
+                            <tr>
+                                <td><%=ex.id.toString%></td>
+                                <td><%=ex.title%></td>
+                                <td><a href="<%=url[ExcursionEdit]("id"->ex.id)%>">изменить</a></td>
+                            </tr>
+                        #end
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

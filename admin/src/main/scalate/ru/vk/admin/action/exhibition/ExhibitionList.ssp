@@ -1,0 +1,41 @@
+<%
+    import ru.vk.admin.components.Pagination
+    import ru.vk.core.model.Exhibition
+    import ru.vk.admin.action.exhibition.ExhibitionEdit
+
+    val pagination: Pagination = at("pagination")
+    val exhibition: List[Exhibition] = at("exhibition")
+%>
+
+<div class="row">
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <a href="<%=url[ExhibitionEdit]()%>" class="btn btn-success">Добавить</a>
+            <h3 class="box-title">Список выстовок</h3>
+        </div>
+        <div class="box-body">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th>#</th>
+                        <th>title</th>
+                        <th style="width: 15%;"></th>
+                    </tr>
+                    #for(ex <-exhibition)
+                        <tr>
+                            <td><%=ex.id.toString%></td>
+                            <td><%=ex.title%></td>
+                            <td><a href="<%=url[ExhibitionEdit]("id"->ex.id)%>">изменить</a></td>
+                        </tr>
+
+                    #end
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer">
+            <%=unescape(pagination.render)%>
+        </div>
+    </div>
+</div>
+</div>

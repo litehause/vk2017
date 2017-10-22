@@ -1,0 +1,71 @@
+<%
+    import ru.vk.admin.action.exhibit.ExhibitList
+    import ru.vk.admin.action.exhibition.ExhibitionList
+    import ru.vk.admin.action.excursion.ExcursionList
+%>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <%=antiCsrfMeta%>
+    <title>Админ панель</title>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="yandex-verification" content="28fc06d91a66f9a1" />
+    <meta name="google-site-verification" content="U2E6C2c21M037o3foV4F9DfRMmw5UEEDpJ1XECWpaxg" />
+
+    <script type="text/javascript" src="${publicUrl("lib/jQuery/jquery-2.1.4.min.js")}"></script>
+    <link type="text/css" rel="stylesheet" media="all" href="<%=publicUrl("lib/bootstrap/css/bootstrap.min.css")%>" />
+    <link type="text/css" rel="stylesheet" media="all" href="<%=publicUrl("css/app.css")%>"/>
+    <script type="text/javascript" src="<%=publicUrl("lib/bootstrap/js/bootstrap.min.js")%>"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="<%=publicUrl("lib/AdminLTE/css/AdminLTE.min.css")%>">
+    <link rel="stylesheet" href="<%=publicUrl("lib/AdminLTE/css/skins/_all-skins.css")%>">
+    <script type="text/javascript" src="<%=publicUrl("lib/AdminLTE/js/adminlte.min.js")%>"></script>
+    <link rel="stylesheet" href="<%=publicUrl("lib/font-awesome/css/font-awesome.min.css")%>">
+    <link rel="stylesheet" href="<%=publicUrl("lib/Ionicons/css/ionicons.min.css")%>">
+</head>
+<body class="skin-blue sidebar-mini">
+    <div class="wrapper">
+<header class="main-header">
+
+    <a href="index2.html" class="logo">
+        <span class="logo-mini"><b>A</b>LT</span>
+        <span class="logo-lg"><b>Admin</b>LTE</span>
+    </a>
+
+    <nav class="navbar navbar-static-top">
+
+        <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+            <span class="sr-only">Toggle navigation</span>
+        </a>
+    </nav>
+</header>
+
+
+
+        <aside class="main-sidebar">
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar" style="height: auto;">
+
+                <ul class="sidebar-menu tree" data-widget="tree">
+                    <li>
+                        <a href="<%=url[ExhibitList]()%>"><i class="fa fa-book"></i> <span>Экспонаты</span></a>
+                    </li>
+                    <li>
+                        <a href="<%=url[ExhibitionList]()%>"><i class="fa fa-book"></i> <span>Выставки</span></a>
+                    </li>
+                    <li>
+                        <a href="<%=url[ExcursionList]()%>">Экскурсии</a>
+                    </li>
+
+                </ul>
+            </section>
+        </aside>
+        <div class="content-wrapper">
+            <%=unescape(renderedView)%>
+        </div>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<%
+    val currentPage: Int = at("currentPage")
+    val next: Option[Int] =  at("next")
+    val prev: Option[Int] = at("prev")
+    val start: Int = at("start")
+    val end: Int = at("end")
+    val urlGenerator: (Int) => String = at("urlGenerator")
+
+    val prevClass = if (prev.isDefined) "" else "disabled"
+    val nextClass = if (next.isDefined) "" else "disabled"
+%>
+<div class="row">
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <nav>
+        <ul class="pagination">
+        <li class="<%=prevClass%>">
+            <a href="<%=prev.map(urlGenerator).getOrElse("javascript:void(0);")%>">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        #for(i:Int <- start to end)
+            <%
+                val liClass = if (i == (currentPage + 1)) "active" else ""
+            %>
+            <li class="<%=liClass%>"><a href="<%=urlGenerator(i)%>"><%=i.toString%></a></li>
+        #end
+
+        <li class="<%=nextClass%>">
+            <a href="<%=next.map(urlGenerator).getOrElse("javascript:void(0);")%>">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+        </ul>
+    </nav>
+</div>
+</div>

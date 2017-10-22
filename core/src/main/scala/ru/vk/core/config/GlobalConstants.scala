@@ -5,4 +5,6 @@ package ru.vk.core.config
   */
 object GlobalConstants {
   val sessionId = "sessionId"
+
+  val fileDirectory = "/opt/production/vk/"
 }

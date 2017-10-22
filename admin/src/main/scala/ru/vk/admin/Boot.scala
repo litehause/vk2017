@@ -1,13 +1,11 @@
-package ru.vk.web
+package ru.vk.admin
 
-import ru.vk.core.db.DB
 import xitrum.Server
 
 
 object Boot {
 
   def main(args: Array[String]): Unit = {
-    DB.db.createConnection().close()
     Server.start()
   }
 }
