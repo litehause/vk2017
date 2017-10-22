@@ -36,7 +36,7 @@
                     <select class="form-control" name="exhibition">
                         <option></option>
                         #for(ex <- exhibitions)
-                            #if(excursion.exists(ex1 => ex1.exhibitionId == exgit .id))
+                            #if(excursion.exists(ex1 => ex1.exhibitionId == ex.id))
                                 <option value="<%=ex.id.toString%>" selected><%=ex.title%></option>
                             #else
                                 <option value="<%=ex.id.toString%>"><%=ex.title%></option>
